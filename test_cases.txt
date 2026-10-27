@@ -1,0 +1,271 @@
+SMART BUS RESERVATION SYSTEM — TEST RESULTS
+Environment: Python 3.13.5; executed main.py as a subprocess with piped input. Each test used a fresh process, so state started clean.
+Actual result is summarized from captured stdout; Matched reflects assertions against actual output and process exit status.
+
+Test ID | Scenario | Input/Action | Expected result | Actual result | Matched (Yes/No)
+TC-01 | View all routes; all five routes and seat status appear | 1, n, 8 | All five starter routes and seat counts are shown. | 1 R101 Karachi -> Hyderabad             08:00 AM   Rs.1200 40/40 | 2 R102 Karachi -> Sukkur                09:30 AM   Rs.2000 36/36 | 3 R103 Hyderabad -> Mirpur Khas         11:00 AM   Rs.800 32/32 | 4 R104 Karachi -> Lahore                07:00 PM   Rs.5000 45/45 | 5 R105 Sukkur -> Hyderabad              02:00 PM   Rs.1500 30/30 [process exit 0] | Yes
+TC-02 | Search Hyderabad | 2, Hyderabad, 8 | R101, R103 and R105 appear; city matching is case-insensitive. | Enter your choice: Enter route ID or city: R101 | Karachi -> Hyderabad | Rs. 1200 | 40 seats available | R103 | Hyderabad -> Mirpur Khas | Rs. 800 | 32 seats available | R105 | Sukkur -> Hyderabad | Rs. 1500 | 30 seats available [process exit 0] | Yes
+TC-03 | Search unknown city Atlantis | 2, Atlantis, 8 | Helpful no-match message and menu continues. | Enter your choice: Enter route ID or city: No matching route found. Enter a route ID or a supported city name. [process exit 0] | Yes
+TC-04 | Book Ahmed age 25 on R101 for 2 seats | 3, Ahmed, 25, R101, 2; availability; 8 | Booking B1001 confirmed, total Rs. 2400; R101 becomes 38/40. | Enter your choice: Enter passenger name: Enter passenger age: Enter route ID: Enter number of seats: Booking confirmed! | Booking ID: B1001 | Route: R101 (Karachi -> Hyderabad) | Total fare: Rs. 2400 | R101 | Karachi -> Hyderabad | 38/40 seats | Partially Booked | R102 | Karachi -> Sukkur | 36/36 seats | Available | R103 | Hyderabad -> Mirpur Khas | 32/32 seats | Available [process exit 0] | Yes
+TC-05 | Reject zero seats | 3, Ahmed, 25, R101, 0; view bookings; exit | Rejects zero; no booking created and no seat decrement. | Enter your choice: Enter passenger name: Enter passenger age: Enter route ID: Enter number of seats: Error: number of seats must be greater than zero. | Enter your choice: No bookings found. | R101 | Karachi -> Hyderabad | 40/40 seats | Available | R102 | Karachi -> Sukkur | 36/36 seats | Available | R103 | Hyderabad -> Mirpur Khas | 32/32 seats | Available | R104 | Karachi -> Lahore | 45/45 seats | Available | R105 | Sukkur -> Hyderabad | 30/30 seats | Available [process exit 0] | Yes
+TC-06 | Reject seats above availability | 3, Ahmed, 25, R101, 41; availability; exit | Request rejected; seats remain 40 and never negative. | Enter your choice: Enter passenger name: Enter passenger age: Enter route ID: Enter number of seats: Error: only 40 seats are available on R101. | R101 | Karachi -> Hyderabad | 40/40 seats | Available | R102 | Karachi -> Sukkur | 36/36 seats | Available | R103 | Hyderabad -> Mirpur Khas | 32/32 seats | Available | R104 | Karachi -> Lahore | 45/45 seats | Available | R105 | Sukkur -> Hyderabad | 30/30 seats | Available [process exit 0] | Yes
+TC-07 | Cancel a confirmed booking | book 2 R101, cancel B1001, view availability | Status becomes Cancelled; 2 seats restored to R101. | Enter your choice: Enter passenger name: Enter passenger age: Enter route ID: Enter number of seats: Booking confirmed! | Booking ID: B1001 | Route: R101 (Karachi -> Hyderabad) | Total fare: Rs. 2400 | Enter your choice: Enter booking ID to cancel: Booking B1001 has been cancelled. Seats restored: 2 Route R101 available seats: 40 | R101 | Karachi -> Hyderabad | 40/40 seats | Available | R102 | Karachi -> Sukkur | 36/36 seats | Available [process exit 0] | Yes
+TC-08 | Cancel same booking twice | book 2 R101, cancel B1001 twice, availability | Second cancellation says already cancelled; no extra restoration. | Enter your choice: Enter passenger name: Enter passenger age: Enter route ID: Enter number of seats: Booking confirmed! | Booking ID: B1001 | Route: R101 (Karachi -> Hyderabad) | Total fare: Rs. 2400 | Enter your choice: Enter booking ID to cancel: Booking B1001 has been cancelled. Seats restored: 2 Route R101 available seats: 40 | Enter your choice: Enter booking ID to cancel: Booking B1001 has already been cancelled. No seats were restored. | R101 | Karachi -> Hyderabad | 40/40 seats | Available [process exit 0] | Yes
+TC-09 | Report with no bookings | 7, 8 | Booking counts, reserved seats and revenue are zero; fully booked routes counted as 0; schedule shown. | Confirmed bookings: 0 | Cancelled bookings: 0 | Seats currently reserved: 0 | Confirmed revenue: Rs. 0 | Fully booked routes: 0 | R101: 0 confirmed booking(s), 0 seat(s), Rs. 0 | R102: 0 confirmed booking(s), 0 seat(s), Rs. 0 [process exit 0] | Yes
+TC-10 | Book all remaining R101 seats | book 40 R101; availability; routes; exit | Booking succeeds; availability is 0/40 and Fully Booked. | Enter your choice: Enter passenger name: Enter passenger age: Enter route ID: Enter number of seats: Booking confirmed! | Booking ID: B1001 | Route: R101 (Karachi -> Hyderabad) | Total fare: Rs. 48000 | R101 | Karachi -> Hyderabad | 0/40 seats | Fully Booked | R102 | Karachi -> Sukkur | 36/36 seats | Available | R103 | Hyderabad -> Mirpur Khas | 32/32 seats | Available [process exit 0] | Yes
+TC-11 | Report after cancellation | book 2 R101, cancel B1001, report | Cancelled count is 1; confirmed revenue and confirmed reserved seats are zero. | Enter your choice: Enter passenger name: Enter passenger age: Enter route ID: Enter number of seats: Booking confirmed! | Booking ID: B1001 | Route: R101 (Karachi -> Hyderabad) | Total fare: Rs. 2400 | Enter your choice: Enter booking ID to cancel: Booking B1001 has been cancelled. Seats restored: 2 Route R101 available seats: 40 | Confirmed bookings: 0 | Cancelled bookings: 1 [process exit 0] | Yes
+TC-12 | Invalid menu choice | abc, 9, 8 | Both non-numeric and out-of-range input handled; menu repeats and program exits. | Enter your choice: Invalid choice. Please enter a number from 1 to 8. | Enter your choice: Invalid choice. Please enter a number from 1 to 8. | Enter your choice: Invalid choice. Please enter a number from 1 to 8. [process exit 0] | Yes
+
+ADDITIONAL VALIDATION TESTS (real subprocess runs)
+Blank passenger name | PASS | observed: passenger name cannot be empty
+Non-numeric age | PASS | observed: age must be a positive whole number
+Age zero | PASS | observed: age must be greater than zero
+Negative age | PASS | observed: age must be greater than zero
+Non-numeric seat count | PASS | observed: seats must be a whole number greater than zero
+One more than available after full booking | PASS | observed: only 0 seats are available on R101. | R101 | Karachi -> Hyderabad | 0/40 seats | Fully Booked
+Unknown route | PASS | observed: route ID does not exist
+Unknown booking ID | PASS | observed: Booking ID not found. No changes made.
+Lowercase route ID search | PASS | observed: R101 | Karachi -> Hyderabad | Rs. 1200 | 40 seats available
+Cancelled booking remains visible | PASS | observed: B1001 | Ahmed | Route R101 | Seats: 2 | Fare: Rs. 2400 | Status: Cancelled
+One seat boundary | PASS | observed: R101 | Karachi -> Hyderabad | 39/40 seats | Partially Booked
+
+CAPTURED TRANSCRIPTS
+The following files contain the full real stdout/stderr and process exit code from separate runs: route_listing_transcript.txt, successful_booking_transcript.txt, cancellation_transcript.txt, report_transcript.txt.
+
+QUALITY ASSURANCE NOTES
+- Syntax compilation: python -m py_compile main.py completed successfully.
+- Runtime version: 3.13.5.
+- Report reconciliation checked by a fresh-session cancellation test: after cancellation, confirmed bookings, confirmed reserved seats, and confirmed revenue are zero while cancelled count is one.
+- Failed booking validation tests confirmed specific errors and no booking/seat mutation for zero seats, too many seats, blank name, invalid age, age zero, and unknown route. These are isolated fresh sessions; TC-05 also checked no booking record and unchanged R101 seats.
+- Remaining limitation: tests are black-box scripted console tests, not a separate automated unit-test suite; state is intentionally memory-only.
+
+FULL CAPTURED TERMINAL TRANSCRIPTS (actual stdout from fresh Python process runs)
+Note: Input is piped, so input characters are not echoed as they would be in some interactive terminals. Each transcript below is the program's captured stdout, followed by stderr and exit code.
+
+===== ROUTE LISTING TRANSCRIPT =====
+$ python main.py < scripted_input.txt
+Welcome to the Smart Bus Ticket Booking & Reservation System.
+
+SMART BUS RESERVATION SYSTEM
+1. View Available Routes
+2. Search for a Route
+3. Book a Ticket
+4. View My Bookings
+5. Cancel a Booking
+6. View Seat Availability
+7. Generate Booking Report
+8. Exit
+================================
+Enter your choice: Show available routes only? (y/n): 
+AVAILABLE BUS ROUTES
+No. Route Journey                         Depart     Fare       Seats
+1 R101 Karachi -> Hyderabad             08:00 AM   Rs.1200 40/40
+2 R102 Karachi -> Sukkur                09:30 AM   Rs.2000 36/36
+3 R103 Hyderabad -> Mirpur Khas         11:00 AM   Rs.800 32/32
+4 R104 Karachi -> Lahore                07:00 PM   Rs.5000 45/45
+5 R105 Sukkur -> Hyderabad              02:00 PM   Rs.1500 30/30
+
+SMART BUS RESERVATION SYSTEM
+1. View Available Routes
+2. Search for a Route
+3. Book a Ticket
+4. View My Bookings
+5. Cancel a Booking
+6. View Seat Availability
+7. Generate Booking Report
+8. Exit
+================================
+Enter your choice: Thank you for using the Smart Bus Reservation System. Goodbye!
+
+[stderr]
+
+[exit code: 0]
+
+===== SUCCESSFUL BOOKING TRANSCRIPT =====
+$ python main.py < scripted_input.txt
+Welcome to the Smart Bus Ticket Booking & Reservation System.
+
+SMART BUS RESERVATION SYSTEM
+1. View Available Routes
+2. Search for a Route
+3. Book a Ticket
+4. View My Bookings
+5. Cancel a Booking
+6. View Seat Availability
+7. Generate Booking Report
+8. Exit
+================================
+Enter your choice: Enter passenger name: Enter passenger age: Enter route ID: Enter number of seats: Booking confirmed!
+Booking ID: B1001
+Passenger: Ahmed
+Route: R101 (Karachi -> Hyderabad)
+Seats booked: 2
+Fare per seat: Rs. 1200
+Total fare: Rs. 2400
+Status: Confirmed
+
+SMART BUS RESERVATION SYSTEM
+1. View Available Routes
+2. Search for a Route
+3. Book a Ticket
+4. View My Bookings
+5. Cancel a Booking
+6. View Seat Availability
+7. Generate Booking Report
+8. Exit
+================================
+Enter your choice: Thank you for using the Smart Bus Reservation System. Goodbye!
+
+[stderr]
+
+[exit code: 0]
+
+===== CANCELLATION TRANSCRIPT =====
+$ python main.py < scripted_input.txt
+Welcome to the Smart Bus Ticket Booking & Reservation System.
+
+SMART BUS RESERVATION SYSTEM
+1. View Available Routes
+2. Search for a Route
+3. Book a Ticket
+4. View My Bookings
+5. Cancel a Booking
+6. View Seat Availability
+7. Generate Booking Report
+8. Exit
+================================
+Enter your choice: Enter passenger name: Enter passenger age: Enter route ID: Enter number of seats: Booking confirmed!
+Booking ID: B1001
+Passenger: Ahmed
+Route: R101 (Karachi -> Hyderabad)
+Seats booked: 2
+Fare per seat: Rs. 1200
+Total fare: Rs. 2400
+Status: Confirmed
+
+SMART BUS RESERVATION SYSTEM
+1. View Available Routes
+2. Search for a Route
+3. Book a Ticket
+4. View My Bookings
+5. Cancel a Booking
+6. View Seat Availability
+7. Generate Booking Report
+8. Exit
+================================
+Enter your choice: Enter booking ID to cancel: Booking B1001 has been cancelled. Seats restored: 2 Route R101 available seats: 40
+
+SMART BUS RESERVATION SYSTEM
+1. View Available Routes
+2. Search for a Route
+3. Book a Ticket
+4. View My Bookings
+5. Cancel a Booking
+6. View Seat Availability
+7. Generate Booking Report
+8. Exit
+================================
+Enter your choice: Thank you for using the Smart Bus Reservation System. Goodbye!
+
+[stderr]
+
+[exit code: 0]
+
+===== REPORT TRANSCRIPT =====
+$ python main.py < scripted_input.txt
+Welcome to the Smart Bus Ticket Booking & Reservation System.
+
+SMART BUS RESERVATION SYSTEM
+1. View Available Routes
+2. Search for a Route
+3. Book a Ticket
+4. View My Bookings
+5. Cancel a Booking
+6. View Seat Availability
+7. Generate Booking Report
+8. Exit
+================================
+Enter your choice: Enter passenger name: Enter passenger age: Enter route ID: Enter number of seats: Booking confirmed!
+Booking ID: B1001
+Passenger: Ahmed
+Route: R101 (Karachi -> Hyderabad)
+Seats booked: 2
+Fare per seat: Rs. 1200
+Total fare: Rs. 2400
+Status: Confirmed
+
+SMART BUS RESERVATION SYSTEM
+1. View Available Routes
+2. Search for a Route
+3. Book a Ticket
+4. View My Bookings
+5. Cancel a Booking
+6. View Seat Availability
+7. Generate Booking Report
+8. Exit
+================================
+Enter your choice: 
+BOOKING REPORT
+Total bookings created: 1
+Confirmed bookings: 1
+Cancelled bookings: 0
+Seats currently reserved: 2
+Confirmed revenue: Rs. 2,400
+Fully booked routes: 0
+Confirmed bookings by route:
+R101: 1 confirmed booking(s), 2 seat(s), Rs. 2,400
+R102: 0 confirmed booking(s), 0 seat(s), Rs. 0
+R103: 0 confirmed booking(s), 0 seat(s), Rs. 0
+R104: 0 confirmed booking(s), 0 seat(s), Rs. 0
+R105: 0 confirmed booking(s), 0 seat(s), Rs. 0
+
+ROUTE SCHEDULE BY DEPARTURE CITY
+Karachi
+R101 -> Hyderabad | 08:00 AM
+R102 -> Sukkur | 09:30 AM
+R104 -> Lahore | 07:00 PM
+Hyderabad
+R103 -> Mirpur Khas | 11:00 AM
+Sukkur
+R105 -> Hyderabad | 02:00 PM
+Mirpur Khas
+No scheduled departures.
+Lahore
+No scheduled departures.
+
+SMART BUS RESERVATION SYSTEM
+1. View Available Routes
+2. Search for a Route
+3. Book a Ticket
+4. View My Bookings
+5. Cancel a Booking
+6. View Seat Availability
+7. Generate Booking Report
+8. Exit
+================================
+Enter your choice: Thank you for using the Smart Bus Reservation System. Goodbye!
+
+[stderr]
+
+[exit code: 0]
+
+MODULAR REFACTOR REGRESSION RUN (fresh subprocess per scenario)
+Environment: Python 3.13.5. After splitting the program into data.py, route_functions.py, booking_functions.py, report_functions.py, and main.py, the following checks were executed against the modular version. Actual results below are from subprocess stdout and exit codes.
+
+Test ID | Scenario | Actual result | Matched
+TC-01 | View all routes | All five IDs R101-R105 present; exit code 0 | Yes
+TC-02 | Search Hyderabad | R101, R103 and R105 result lines present; exit code 0 | Yes
+TC-03 | Search Atlantis | No-match message and clean exit; exit code 0 | Yes
+TC-04 | Book 2 seats on R101 | B1001, total fare Rs. 2400, availability 38/40; exit code 0 | Yes
+TC-05 | Zero seats | Rejection message and No bookings found; exit code 0 | Yes
+TC-06 | Request 41 seats on R101 | Rejection says only 40 available; availability stays 40/40; exit code 0 | Yes
+TC-07 | Cancel confirmed booking | Cancellation message and R101 available seats 40; exit code 0 | Yes
+TC-08 | Cancel same booking twice | Second attempt says already cancelled and no seats restored; exit code 0 | Yes
+TC-09 | Report with no bookings | Zero booking/revenue totals and route schedule present; exit code 0 | Yes
+TC-10 | Book all 40 seats | Booking succeeds; availability 0/40 and Fully Booked; exit code 0 | Yes
+TC-11 | Report after cancellation | Cancelled bookings 1 and confirmed revenue Rs. 0; exit code 0 | Yes
+TC-12 | Invalid menu choices | Text and out-of-range choices handled; clean exit; exit code 0 | Yes
+Extra | Blank name, non-numeric age, age zero/negative, unknown route, unknown booking, lowercase route ID, non-numeric seats, cancelled-record visibility, one-seat boundary, empty menu input | All 11 checks matched expected output; all subprocesses exited 0 | Yes
+Syntax | python -m py_compile main.py data.py route_functions.py booking_functions.py report_functions.py | Compilation succeeded | Yes
+
+Note: The regression checks assert expected output fragments from real subprocess runs. The four full transcript files remain representative of the console behavior; they were captured before modularization when the console output was the same. No persistent state is written to disk.

@@ -1,0 +1,37 @@
+$ python main.py < scripted_input.txt
+Welcome to the Smart Bus Ticket Booking & Reservation System.
+
+SMART BUS RESERVATION SYSTEM
+1. View Available Routes
+2. Search for a Route
+3. Book a Ticket
+4. View My Bookings
+5. Cancel a Booking
+6. View Seat Availability
+7. Generate Booking Report
+8. Exit
+================================
+Enter your choice: Enter passenger name: Enter passenger age: Enter route ID: Enter number of seats: Booking confirmed!
+Booking ID: B1001
+Passenger: Ahmed
+Route: R101 (Karachi -> Hyderabad)
+Seats booked: 2
+Fare per seat: Rs. 1200
+Total fare: Rs. 2400
+Status: Confirmed
+
+SMART BUS RESERVATION SYSTEM
+1. View Available Routes
+2. Search for a Route
+3. Book a Ticket
+4. View My Bookings
+5. Cancel a Booking
+6. View Seat Availability
+7. Generate Booking Report
+8. Exit
+================================
+Enter your choice: Thank you for using the Smart Bus Reservation System. Goodbye!
+
+[stderr]
+
+[exit code: 0]

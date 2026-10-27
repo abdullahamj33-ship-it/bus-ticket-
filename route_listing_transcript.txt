@@ -1,0 +1,37 @@
+$ python main.py < scripted_input.txt
+Welcome to the Smart Bus Ticket Booking & Reservation System.
+
+SMART BUS RESERVATION SYSTEM
+1. View Available Routes
+2. Search for a Route
+3. Book a Ticket
+4. View My Bookings
+5. Cancel a Booking
+6. View Seat Availability
+7. Generate Booking Report
+8. Exit
+================================
+Enter your choice: Show available routes only? (y/n): 
+AVAILABLE BUS ROUTES
+No. Route Journey                         Depart     Fare       Seats
+1 R101 Karachi -> Hyderabad             08:00 AM   Rs.1200 40/40
+2 R102 Karachi -> Sukkur                09:30 AM   Rs.2000 36/36
+3 R103 Hyderabad -> Mirpur Khas         11:00 AM   Rs.800 32/32
+4 R104 Karachi -> Lahore                07:00 PM   Rs.5000 45/45
+5 R105 Sukkur -> Hyderabad              02:00 PM   Rs.1500 30/30
+
+SMART BUS RESERVATION SYSTEM
+1. View Available Routes
+2. Search for a Route
+3. Book a Ticket
+4. View My Bookings
+5. Cancel a Booking
+6. View Seat Availability
+7. Generate Booking Report
+8. Exit
+================================
+Enter your choice: Thank you for using the Smart Bus Reservation System. Goodbye!
+
+[stderr]
+
+[exit code: 0]
